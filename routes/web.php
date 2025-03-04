@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Users;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,17 @@ use App\Http\Controllers\Users;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/updateUser/{id}', [UsersController::class, 'update']);
+Route::post('/updateUser/{id}', [UsersController::class, 'storeUpdate']);
+
+Route::view('/addUser', 'addUser');
+Route::post('/addUser', [UsersController::class, 'store']);
+Route::get('/delete/{id}', [UsersController::class, 'delete']);
+
+Route::get('/users', [UsersController::class, 'index']);
+
+Route::get('/test', [UsersController::class, 'index']);
 
 Route::get('/', function () {
     return view('welcome', );
@@ -30,8 +42,6 @@ Route::view('/ContactUs', 'contact');
 
 //Route::get('/users/{user}', [Users::class, 'index']);
 
-Route::get('/user/{user}', [Users::class, 'loadView']);
-
-Route::get('/user/{username}/{department}', function($username, $department) {
-    return view('user', ['user' => $username, 'department' => $department]);
-});
+// Route::get('/user', function($users) {
+//     return view('userInner', [UsersController::class, 'index']);
+// });

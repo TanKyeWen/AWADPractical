@@ -1,6 +1,6 @@
 <x-header data=x />
 
-hello, {{ $user }}
+<!-- hello, {{ $user }}
 @if ($user==="admin")
     <p>Welcome, Admin</p>
 @elseif ($user==="John")
@@ -11,11 +11,13 @@ hello, {{ $user }}
 
 @foreach (['car', 'pen', 'whataboutchu', 'ambatukan'] as $item)
     <p>{{ $item }}</p>
-@endforeach
+@endforeach -->
+
+<h1> User View </h1>
 
 @include('userInner')
 
 <script>
-    var items = @json(['car', 'pen', 'abc']);
+    var items = ['car', 'pen', 'abc'];
     console.warn(items);
 </script>
