@@ -19,12 +19,24 @@ class UsersController extends Controller
         return view('userInner', ['users'=>$users]);
     }
 
-    public function store(Request $request)
+    public function oneToMany()
     {
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
+        return User::find(2) -> getCompany;
+    }
+
+    public function companyIndex()
+    {
+        $data = User::find(2)->getCompany;
+        $user = User::find(2);
+
+        return view('company', ['data' => $data], ['user' => $user]);
+    }
+
+    public function signUpStore(Request $request)
+    {
+        $data = $request->all();
+        $data['is_admin'] = 0;
+        User::create($data);
         return redirect("/users");
     }
 

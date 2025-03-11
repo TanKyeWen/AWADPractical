@@ -15,12 +15,17 @@ use App\Http\Controllers\UsersController;
 |
 */
 
+Route::get('/work2', [UsersController::class, 'companyIndex']);
+
 Route::get('/updateUser/{id}', [UsersController::class, 'update']);
 Route::post('/updateUser/{id}', [UsersController::class, 'storeUpdate']);
 
 Route::view('/addUser', 'addUser');
 Route::post('/addUser', [UsersController::class, 'store']);
 Route::get('/delete/{id}', [UsersController::class, 'delete']);
+
+Route::view('/signUp', 'signup');
+Route::post('/signUp', [UsersController::class, 'signUpStore']);
 
 Route::get('/users', [UsersController::class, 'index']);
 

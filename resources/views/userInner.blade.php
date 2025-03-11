@@ -28,4 +28,4 @@
     {{ $users->links() }}
 </span>
 
-<a href="/addUser"> Add User Page</a>
+<a href="/signUp"> Sign Up Page</a>
