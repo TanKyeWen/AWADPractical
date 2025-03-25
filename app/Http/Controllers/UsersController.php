@@ -8,6 +8,12 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
+    public function login(Request $req){
+        $req->validate([
+            'email' => 'required',
+            'password' => 'required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[!@#$%^&*()]/'
+        ]);
+    }
     function testData()
     {
         return DB::select("select * from users");

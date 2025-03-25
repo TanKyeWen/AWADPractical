@@ -15,6 +15,13 @@ use App\Http\Controllers\UsersController;
 |
 */
 
+Route::middleware(['protectedPage'])->group(function(){
+    Route::view('/signUp', 'signup');
+    Route::view('/contact', 'contact');
+});
+Route::view('/login', 'login')->middleware('ageCheck');
+Route::post('/login', [UsersController::class, 'login']);
+
 Route::get('/work2', [UsersController::class, 'companyIndex']);
 
 Route::get('/updateUser/{id}', [UsersController::class, 'update']);
@@ -24,7 +31,6 @@ Route::view('/addUser', 'addUser');
 Route::post('/addUser', [UsersController::class, 'store']);
 Route::get('/delete/{id}', [UsersController::class, 'delete']);
 
-Route::view('/signUp', 'signup');
 Route::post('/signUp', [UsersController::class, 'signUpStore']);
 
 Route::get('/users', [UsersController::class, 'index']);
@@ -42,8 +48,6 @@ Route::get('/AboutUs', function () {
 Route::get('/bye', function () {
     return 'goodbye';
 });
-
-Route::view('/ContactUs', 'contact');
 
 //Route::get('/users/{user}', [Users::class, 'index']);
 
