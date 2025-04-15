@@ -15,11 +15,29 @@ use App\Http\Controllers\UsersController;
 |
 */
 
-Route::middleware(['protectedPage'])->group(function(){
-    Route::view('/signUp', 'signup');
-    Route::view('/contact', 'contact');
+Route::view('/signUp', 'signup');
+Route::post('/signUp', [UsersController::class, 'signup']);
+
+// Route::middleware(['protectedPage'])->group(function(){
+//     Route::view('/signUp', 'signup');
+//     Route::view('/contact', 'contact');
+// });
+// Route::view('/login', 'login')->middleware('ageCheck');
+Route::get('/login', function(){
+    if(session()->has('user')){
+        return redirect('/');
+    };
+    return view('/login');
 });
-Route::view('/login', 'login')->middleware('ageCheck');
+
+Route::get('/logout', function(){
+    if(session()->has('user')){
+        session()->pull('user');
+        session()->flush();
+    };
+    return redirect('/login');
+});
+
 Route::post('/login', [UsersController::class, 'login']);
 
 Route::get('/work2', [UsersController::class, 'companyIndex']);
@@ -31,7 +49,7 @@ Route::view('/addUser', 'addUser');
 Route::post('/addUser', [UsersController::class, 'store']);
 Route::get('/delete/{id}', [UsersController::class, 'delete']);
 
-Route::post('/signUp', [UsersController::class, 'signUpStore']);
+//Route::post('/signUp', [UsersController::class, 'signUpStore']);
 
 Route::get('/users', [UsersController::class, 'index']);
 

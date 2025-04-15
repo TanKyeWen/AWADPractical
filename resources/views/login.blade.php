@@ -8,12 +8,16 @@
 
 <br>
 
-<form action="login" method="POST">
+<form action="/login" method="POST">
     @csrf
     <input type="text" name="email" placeholder="Enter Email"> <br>
     <span style="color: red">@error('email'){{$message}}@enderror</span><br> 
+    <input type="text" name="username" placeholder="Enter Username"> <br>
+    <br>
     <input type="password" name="password" placeholder="Enter Password"> <br>
     <span style="color: red">@error('password'){{$message}}@enderror</span><br> 
+    <input type="password" name="repassword" placeholder="Enter Password Again"> <br>
+    <span style="color: red">@error('repassword'){{$message}}@enderror</span><br> 
     <input type="hidden" name="is_admin" value="0"> 
     <br>
     <button type="submit"> Login </button>

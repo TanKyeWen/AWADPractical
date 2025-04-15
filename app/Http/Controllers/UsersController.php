@@ -8,11 +8,29 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
+    public function signup(Request $req){
+        $req->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'repassword' => 'required|same:password',
+        ]);
+        $data = $req->input();
+        //$req->session()->put('user', $data['username']);
+        // For Single req
+        $req->session()->flash('user', $data['username']);
+        return redirect('/signUp');
+    }
     public function login(Request $req){
         $req->validate([
-            'email' => 'required',
-            'password' => 'required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[!@#$%^&*()]/'
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'repassword' => 'required|same:password',
         ]);
+        $data = $req->input();
+        $req->session()->put('user', $data['username']);
+        // For Single req
+        //$req->session()->flash('user', $data['username']);
+        return redirect('/');
     }
     function testData()
     {
