@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { Table, Button } from 'reactstrap';
 import axios from 'axios';
 
-export default class Example extends Component {
-    constructor(){
-    super()
+export default class Example3 extends Component {
+    constructor(props){
+    super(props)
         this.state = {
-            posts: [] //response of API into post state
+            posts: [], //response of API into post state
+            newPostModal: false,
         }
     }
 
@@ -17,6 +18,41 @@ export default class Example extends Component {
                 posts:response.data
             })
         })
+    }
+
+    callUpdatePost(id, title, content, user_id)
+    {
+        this.setState({
+            updatePostData:{id, title, content, user_id},
+            updatePostModal: !this.state.updatePostModal
+        })
+    }
+    updatePost(){
+        let {id, title, content, user_id } = this.state.updatePostData
+            axios.put('http://127.0.0.1:8000/api/post/'+ this.state.updatePostData.id,{
+                title, content, user_id
+            }).then((response) => {
+                this.loadPost()
+                this.setState({ //after execution, set all states to false
+                    updatePostModal: false,
+                    updatePostData: {id:"", title:"", content:"", user_id:"" }
+                })
+            })
+    }
+    toggleNewPostModal(){
+        this.setState({
+            newPostModal:!this.state.newPostModal
+        })
+    }
+
+    toggleUpdatePostModal(){
+        this.setState({
+            updatePostModal:!this.state.updatePostModal
+        })
+    }
+
+    componentDidMount(){
+        this.loadPost();
     }
     componentWillMount(){
         this.loadPost();
@@ -41,6 +77,35 @@ export default class Example extends Component {
         
         return (
             <div className="container">
+                <Button color="primary" onClick={this.toggleNewPostModal.bind(this)}>Add Post</Button>
+                <Modal isOpen={this.state.newPostModal} toggle={this.toggleNewPostModal.bind(this)}>
+                    <ModalHeader toggle={this.toggleNewPostModal.bind(this)}> Add New Post </ModalHeader>
+
+                    <ModalBody>
+                        <FormGroup>
+                            <Label for = "title">Title</Label>
+                            <Input id = "title"></Input>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label for = "content">Content</Label>
+                            <Input id = "content"></Input>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label for = "user_id">User ID</Label>
+                            <Input id = "user_id"></Input>
+                        </FormGroup>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.toggleNewPostModal.bind(this)}> Add Post </Button>{' '}
+                        <Button color="secondary" onClick={this.toggleNewPostModal.bind(this)}> Cancel </Button>
+                    </ModalFooter>
+                </Modal>
+
+                <Button color='primary'>Add new post</Button>
+                
                 <Table>
                     <thead>
                         <tr>

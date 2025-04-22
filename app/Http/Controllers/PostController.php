@@ -9,8 +9,8 @@ class PostController extends Controller
 {
     //
     public function index(){
-        $data = Post::all();
-        return $data;
+        $posts = Post::all();
+        return $posts;
     }
     public function store(Request $request)
     {
