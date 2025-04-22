@@ -72,3 +72,14 @@ Route::get('/bye', function () {
 // Route::get('/user', function($users) {
 //     return view('userInner', [UsersController::class, 'index']);
 // });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
