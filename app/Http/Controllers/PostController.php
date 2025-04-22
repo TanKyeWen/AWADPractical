@@ -16,19 +16,19 @@ class PostController extends Controller
     {
         $data = $request->all();
         Post::create($data);
-        return redirect("/posts");
+        return response()->json(['success' => true]);
     }
     public function destroy($id)
     {
         $data = Post::findorFail($id);
         $data->delete();
-        return 204;
+        return response()->json(['message' => 'Post deleted successfully!'], 204);
     }
 
     public function update(Request $req, $id)
     {
         $data = Post::findOrFail($id);
         $data->update($req->all());
-        return $data;
+        return response()->json(['success' => true]);
     }
 }

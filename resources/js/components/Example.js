@@ -19,6 +19,13 @@ export default class Example extends Component {
         this.state = {
             posts: [], //response of API into post state
             newPostModal: false,
+            editPostModal: false,
+            newPostData: {
+                id: '',
+                title: '',
+                content: '',
+                user_id: ''
+            },
         }
     }
 
@@ -35,26 +42,44 @@ export default class Example extends Component {
         .then((response) => {
             console.log(response);
             this.loadPost();
-        })
-    }
-    callUpdatePost(id, title, content, user_id)
-    {
-        this.setState({
-            updatePostData:{id, title, content, user_id},
-            updatePostModal: !this.state.updatePostModal
-        })
-    }
-    updatePost(){
-        let {id, title, content, user_id } = this.state.updatePostData
-            axios.put('http://127.0.0.1:8000/api/post/'+ this.state.updatePostData.id,{
-                title, content, user_id
-            }).then((response) => {
-                this.loadPost()
-                this.setState({ //after execution, set all states to false
-                    updatePostModal: false,
-                    updatePostData: {id:"", title:"", content:"", user_id:"" }
-                })
+            this.setState({
+                newPostData: {id:"", title:"", content:"", user_id:"" }
             })
+        })
+    }
+    // updatePost(){
+    //     let {id, title, content, user_id} = this.state.updatePostData
+    //     axios.put('http://127.0.0.1:8000/api/post/' + id, {title, content, user_id}).then((response) => {
+    //         this.loadPost()
+    //         this.setState({
+    //             updatePostModel: false,
+    //             newPostData: {id: '', title: '', content: '', user_id: ''}
+    //         })
+    //     })
+    // }
+    deletePost(id){
+        axios.delete('http://127.0.0.1:8000/api/post/' + id).then((response) => {
+            this.loadPost();
+            alert(`Item ${id} has been deleted`);
+        })
+    }
+    // callUpdatePost(id, title, content, user_id)
+    // {
+    //     this.setState({
+    //         updatePostData:{id, title, content, user_id},
+    //         updatePostModal: !this.state.updatePostModal
+    //     })
+    // }
+    updatePost(){
+        let {id, title, content, user_id } = this.state.newPostData
+        axios.put('http://127.0.0.1:8000/api/post/'+ id,{
+            title, content, user_id
+        }).then((response) => {
+            this.loadPost()
+            this.setState({ //after execution, set all states to false
+                newPostData: {id:"", title:"", content:"", user_id:"" }
+            })
+        })
     }
     toggleNewPostModal(){
         this.setState({
@@ -62,9 +87,9 @@ export default class Example extends Component {
         })
     }
 
-    toggleUpdatePostModal(){
+    toggleUpdatePostModel(){
         this.setState({
-            updatePostModal:!this.state.updatePostModal
+            editPostModal: !this.state.editPostModal
         })
     }
 
@@ -83,9 +108,18 @@ export default class Example extends Component {
                     <td>{post.title}</td>
                     <td>{post.content}</td>
                     <td>
-                        <Button color="success" size="sm" className="mr-2"> Edit
+                        <Button color="success" size="sm" className="mr-2" onClick={() => this.setState({
+                            newPostData: {
+                                id: post.id,
+                                title: post.title,
+                                content: post.content,
+                                user_id: post.user_id
+                              },
+                              editPostModal: true
+                            })}> Edit
                         </Button>
-                        <Button color="danger" size="sm" className="mr-2"> Delete
+                        <Button color="danger" size="sm" className="mr-2" onClick={() => this.deletePost(post.id)}> 
+                            Delete
                         </Button>
                     </td>
                 </tr>
@@ -95,34 +129,116 @@ export default class Example extends Component {
         return (
             <div className="container">
                 <Button color="primary" onClick={this.toggleNewPostModal.bind(this)}>Add Post</Button>
+
+                {/* Add Modal */}
                 <Modal isOpen={this.state.newPostModal} toggle={this.toggleNewPostModal.bind(this)}>
                     <ModalHeader toggle={this.toggleNewPostModal.bind(this)}> Add New Post </ModalHeader>
 
                     <ModalBody>
                         <FormGroup>
                             <Label for = "title">Title</Label>
-                            <Input id = "title"></Input>
+                            <Input
+                                id="title"
+                                value={this.state.newPostData.title}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.title = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                                />
                         </FormGroup>
 
                         <FormGroup>
                             <Label for = "content">Content</Label>
-                            <Input id = "content"></Input>
+                            <Input
+                                id="content"
+                                value={this.state.newPostData.content}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.content = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                                />
                         </FormGroup>
 
                         <FormGroup>
                             <Label for = "user_id">User ID</Label>
-                            <Input id = "user_id"></Input>
+                            <Input
+                                id="user_id"
+                                value={this.state.newPostData.user_id}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.user_id = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                                />
                         </FormGroup>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button color="primary" onClick={this.toggleNewPostModal.bind(this)}> Add Post </Button>{' '}
+                        <Button color="primary" onClick={() => {
+                            this.addPost(this.state.newPostData.user_id, this.state.newPostData.title, this.state.newPostData.content);
+                            this.toggleNewPostModal();
+                        }}> Add Post </Button>{' '}
                         <Button color="secondary" onClick={this.toggleNewPostModal.bind(this)}> Cancel </Button>
                     </ModalFooter>
                 </Modal>
+            
 
-                <Button color='primary'>Add new post</Button>
-                
+                {/* Edit Modal */}
+                <Modal isOpen={this.state.editPostModal} toggle={this.toggleUpdatePostModel.bind(this)}>
+                    <ModalHeader toggle={this.toggleUpdatePostModel.bind(this)}> Edit Post </ModalHeader>
+
+                    <ModalBody>
+                        <FormGroup>
+                            <Label for = "title">Title</Label>
+                            <Input
+                                id="title"
+                                value={this.state.newPostData.title}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.title = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                                />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label for = "content">Content</Label>
+                            <Input
+                                id="content"
+                                value={this.state.newPostData.content}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.content = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                                />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label for = "user_id">User ID</Label>
+                            <Input
+                                id="user_id"
+                                value={this.state.newPostData.user_id}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.user_id = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                                />
+                        </FormGroup>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button color="primary" onClick={() => {
+                            this.updatePost();
+                            this.toggleUpdatePostModel();
+                        }}> Edit Post </Button>{' '}
+                        <Button color="secondary" onClick={this.toggleUpdatePostModel.bind(this)}> Cancel </Button>
+                    </ModalFooter>
+                </Modal>
+
                 <Table>
                     <thead>
                         <tr>
