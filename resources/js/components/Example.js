@@ -125,7 +125,6 @@ export default class Example extends Component {
                 </tr>
             )
         })
-        
         return (
             <div className="container">
                 <Button color="primary" onClick={this.toggleNewPostModal.bind(this)}>Add Post</Button>
