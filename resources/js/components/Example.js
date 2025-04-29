@@ -1,3 +1,33 @@
+/*
+AWAD MIGRATION 
+create table
+php artisan make:migration create_student_table
+
+migrate the file
+php artisan migrate --path=/database/migrations/2025_02_26_012948_create_student_table.php
+
+Create Controller
+php artisan make:controller ControllerName
+
+Create header component
+php artisan make:component Header
+
+Laravel new practical
+composer create-project --prefer-dist laravel/Laravel
+php artisan make:migration create_user
+php artisan make:model modelname
+php artisan make:controller ControllerName
+php artisan make:component Header
+
+composer install
+composer update
+npm audit fix --force
+npm install
+npm run watch
+php artisan migrate:fresh
+php artisan serve
+*/
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -9,7 +39,8 @@ import {
     ModalFooter,
     FormGroup,
     Label,
-    Input
+    Input,
+    DatePicker
   } from 'reactstrap';
 import axios from 'axios';
 
@@ -135,40 +166,64 @@ export default class Example extends Component {
 
                     <ModalBody>
                         <FormGroup>
-                            <Label for = "title">Title</Label>
+                            <Label for = "ProductTitle">ProductTitle</Label>
                             <Input
-                                id="title"
-                                value={this.state.newPostData.title}
+                                id="ProductTitle"
                                 onChange={(e) => {
-                                    let { newPostData } = this.state;
-                                    newPostData.title = e.target.value;
-                                    this.setState({ newPostData });
+                                    let { newProductData } = this.state;
+                                    newProductData.ProductTitle = e.target.value;
+                                    this.setState({ newProductData });
                                 }}
                                 />
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for = "content">Content</Label>
+                            <Label for = "Product_description">Product Description</Label>
                             <Input
-                                id="content"
-                                value={this.state.newPostData.content}
+                                id="Product_description"
+                                type="textarea"
                                 onChange={(e) => {
-                                    let { newPostData } = this.state;
-                                    newPostData.content = e.target.value;
-                                    this.setState({ newPostData });
+                                    let { newProductData } = this.state;
+                                    newProductData.Product_desciption = e.target.value;
+                                    this.setState({ newProductData });
                                 }}
                                 />
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for = "user_id">User ID</Label>
+                            <Label for = "Manufacturing_date">Manufacturing Date</Label>
                             <Input
-                                id="user_id"
-                                value={this.state.newPostData.user_id}
+                                id="Manufacturing_date"
+                                type="date"
                                 onChange={(e) => {
-                                    let { newPostData } = this.state;
-                                    newPostData.user_id = e.target.value;
-                                    this.setState({ newPostData });
+                                    let { newProductData } = this.state;
+                                    newProductData.Manufacturing_date = e.target.value;
+                                    this.setState({ newProductData });
+                                }}
+                                />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label for = "Quantity">Quantity</Label>
+                            <Input
+                                id="Quantity"
+                                value={ 0 }
+                                onChange={(e) => {
+                                    let { newProductData } = this.state;
+                                    newProductData.Quantity = e.target.value;
+                                    this.setState({ newProductData });
+                                }}
+                                />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label for = "User_id">User ID</Label>
+                            <Input
+                                id="User_id"
+                                onChange={(e) => {
+                                    let { newProductData } = this.state;
+                                    newProductData.User_id = e.target.value;
+                                    this.setState({ newProductData });
                                 }}
                                 />
                         </FormGroup>
